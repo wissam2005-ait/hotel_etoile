@@ -1,0 +1,341 @@
+/*
+ * theme.css — Variables dark / light pour toutes les pages
+ * À inclure dans TOUTES les pages après les autres CSS
+ */
+
+
+/* ══════════════════════════════════════════════
+   VARIABLES COMMUNES
+══════════════════════════════════════════════ */
+
+:root {
+    --gold: #C9A96E;
+    --gold-light: #DFC08A;
+    --gold-dark: #A8824A;
+}
+
+
+/* ══════════════════════════════════════════════
+   MODE CLAIR (défaut)
+══════════════════════════════════════════════ */
+
+[data-theme="light"],
+:root:not([data-theme="dark"]) {
+    --bg: #faf9f7;
+    --bg-alt: #F7F3EC;
+    --bg-card: #ffffff;
+    --bg-panel: #ffffff;
+    --bg-input: #ffffff;
+    --bg-nav: rgba(253, 250, 245, 0.97);
+    --text-main: #1a1a1a;
+    --text-mid: #3A3228;
+    --text-muted: #8A7D6E;
+    --border: #E8DDD0;
+    --border-focus: #C9A96E;
+    --shadow: rgba(0, 0, 0, 0.07);
+    --shadow-lg: rgba(0, 0, 0, 0.12);
+    --hero-overlay: rgba(14, 12, 10, 0.55);
+    /* Navbar */
+    --nav-text: #4a4a4a;
+    --nav-link: #4a4a4a;
+    /* Alerts */
+    --success-bg: #d4edda;
+    --success-text: #155724;
+    --danger-bg: #f8d7da;
+    --danger-text: #721c24;
+    /* Panel gauche (login/register) */
+    --panel-left-bg: linear-gradient(160deg, #1C1915 0%, #2E2318 50%, #3D2B1F 100%);
+}
+
+
+/* ══════════════════════════════════════════════
+   MODE SOMBRE
+══════════════════════════════════════════════ */
+
+[data-theme="dark"] {
+    --bg: #0E0C0A;
+    --bg-alt: #161210;
+    --bg-card: #1C1915;
+    --bg-panel: #1E1A14;
+    --bg-input: #252018;
+    --bg-nav: rgba(14, 12, 10, 0.97);
+    --text-main: #F0EBE1;
+    --text-mid: #C8BFB2;
+    --text-muted: #7A6E62;
+    --border: rgba(201, 169, 110, 0.18);
+    --border-focus: #C9A96E;
+    --shadow: rgba(0, 0, 0, 0.35);
+    --shadow-lg: rgba(0, 0, 0, 0.5);
+    --hero-overlay: rgba(0, 0, 0, 0.65);
+    /* Navbar */
+    --nav-text: #C8BFB2;
+    --nav-link: #C8BFB2;
+    /* Alerts */
+    --success-bg: rgba(21, 87, 36, 0.35);
+    --success-text: #6fcf97;
+    --danger-bg: rgba(114, 28, 36, 0.35);
+    --danger-text: #f87171;
+    /* Panel gauche (login/register) — identique car déjà sombre */
+    --panel-left-bg: linear-gradient(160deg, #1C1915 0%, #2E2318 50%, #3D2B1F 100%);
+}
+
+
+/* ══════════════════════════════════════════════
+   APPLICATION GLOBALE
+══════════════════════════════════════════════ */
+
+body {
+    background: var(--bg) !important;
+    color: var(--text-main) !important;
+    transition: background 0.35s ease, color 0.35s ease;
+}
+
+
+/* ── Navbar ─────────────────────────────────── */
+
+.navbar.scrolled {
+    background: var(--bg-nav) !important;
+    box-shadow: 0 1px 0 rgba(201, 169, 110, 0.15), 0 8px 30px var(--shadow) !important;
+}
+
+.navbar.scrolled .logo-text,
+.navbar.scrolled .nav-links a {
+    color: var(--nav-link) !important;
+}
+
+.navbar.scrolled .btn-nav-login {
+    border-color: var(--gold) !important;
+    color: var(--gold) !important;
+}
+
+.navbar.scrolled .user-welcome {
+    color: var(--text-main) !important;
+}
+
+
+/* ── Cards & Panels ─────────────────────────── */
+
+.room-card,
+.service-card,
+.testimonial-card,
+.booking-panel,
+.reservation-item,
+.panel-right,
+.register-form-wrap,
+.login-form-wrap {
+    background: var(--bg-card) !important;
+    border-color: var(--border) !important;
+    color: var(--text-main) !important;
+    transition: background 0.35s ease, border-color 0.35s ease;
+}
+
+
+/* ── Inputs ─────────────────────────────────── */
+
+.form-control,
+.form-select,
+.form-input {
+    background: var(--bg-input) !important;
+    border-color: var(--border) !important;
+    color: var(--text-main) !important;
+    transition: background 0.35s ease, border-color 0.2s, color 0.35s ease;
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-input:focus {
+    border-color: var(--border-focus) !important;
+    box-shadow: 0 0 0 3px rgba(201, 169, 110, 0.15) !important;
+}
+
+.form-control::placeholder,
+.form-input::placeholder {
+    color: var(--text-muted) !important;
+    opacity: 0.7;
+}
+
+
+/* ── Labels & Text ──────────────────────────── */
+
+.form-label,
+.form-header h3,
+.form-header p,
+.room-name,
+.room-description,
+.feat-title,
+.section-title,
+.section-title:not(em) {
+    color: var(--text-main) !important;
+}
+
+.form-header p,
+.room-description,
+.room-capacity,
+.feat-desc {
+    color: var(--text-muted) !important;
+}
+
+
+/* ── Alerts ─────────────────────────────────── */
+
+.alert-success,
+.flash-success {
+    background: var(--success-bg) !important;
+    color: var(--success-text) !important;
+    border-color: rgba(111, 207, 151, 0.3) !important;
+}
+
+.alert-danger,
+.flash-danger,
+.alert-danger,
+.error-box {
+    background: var(--danger-bg) !important;
+    color: var(--danger-text) !important;
+    border-color: rgba(248, 113, 113, 0.3) !important;
+}
+
+
+/* ── Stats bar ──────────────────────────────── */
+
+.stats-bar {
+    background: var(--bg-alt) !important;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+[data-theme="dark"] .stats-bar {
+    background: #161210 !important;
+}
+
+.stat-item {
+    border-right-color: var(--border) !important;
+}
+
+.stat-label {
+    color: var(--text-muted) !important;
+}
+
+
+/* ── About / Dark sections (already dark, keep as-is) ── */
+
+[data-theme="dark"] .about-section {
+    background: #0A0806 !important;
+}
+
+
+/* ── Services background ────────────────────── */
+
+.services-bg {
+    background: var(--bg-alt) !important;
+}
+
+
+/* ── Testimonials ───────────────────────────── */
+
+.testimonials-section {
+    background: var(--bg) !important;
+}
+
+.testimonial-card {
+    background: var(--bg-card) !important;
+    border-color: var(--border) !important;
+}
+
+.testimonial-text {
+    color: var(--text-mid) !important;
+}
+
+
+/* ── Footer ─────────────────────────────────── */
+
+[data-theme="light"] footer {
+    background: #0a0a0a !important;
+}
+
+
+/* ── Booking page specifics ─────────────────── */
+
+[data-theme="dark"] .hero-booking {
+    background: linear-gradient(135deg, #0A0806, #161210) !important;
+}
+
+[data-theme="dark"] .price-calculator {
+    background: rgba(201, 169, 110, 0.08) !important;
+    border: 1px solid rgba(201, 169, 110, 0.15) !important;
+}
+
+[data-theme="dark"] .empty-preview {
+    background: rgba(201, 169, 110, 0.05) !important;
+    border-color: rgba(201, 169, 110, 0.2) !important;
+}
+
+[data-theme="dark"] .selected-preview {
+    background: rgba(201, 169, 110, 0.06) !important;
+}
+
+
+/* ── Auth pages ─────────────────────────────── */
+
+[data-theme="dark"] .panel-right {
+    background: var(--bg) !important;
+}
+
+[data-theme="dark"] .auth-footer a {
+    color: var(--gold) !important;
+}
+
+
+/* ── Room cards footer border ───────────────── */
+
+.room-footer {
+    border-top-color: var(--border) !important;
+}
+
+
+/* ── Reservation items ──────────────────────── */
+
+[data-theme="dark"] .reservation-item {
+    border-color: var(--border) !important;
+}
+
+
+/* ── Scrollbar ──────────────────────────────── */
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+    background: #161210;
+}
+
+
+/* ── Admin hint ─────────────────────────────── */
+
+[data-theme="dark"] .admin-hint {
+    background: rgba(201, 169, 110, 0.06) !important;
+    border-color: rgba(201, 169, 110, 0.2) !important;
+    color: var(--text-muted) !important;
+}
+
+
+/* ── Back link ──────────────────────────────── */
+
+[data-theme="dark"] .back-link {
+    color: var(--text-muted) !important;
+}
+
+
+/* ── Divider ────────────────────────────────── */
+
+[data-theme="dark"] .divider {
+    color: var(--text-muted) !important;
+}
+
+[data-theme="dark"] .divider::before,
+[data-theme="dark"] .divider::after {
+    background: var(--border) !important;
+}
+
+
+/* ── Password strength text ─────────────────── */
+
+[data-theme="dark"] .form-header a {
+    color: var(--gold) !important;
+}
