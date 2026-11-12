@@ -237,8 +237,8 @@ $statut_class  = ['en_attente'=>'badge-pending','confirmee'=>'badge-confirm','an
             <?php foreach ($reservations as $r): ?>
             <div class="res-card <?= $r['statut'] ?>">
                 <div class="res-thumb">
-                    <?php if (!empty($r['chambre_image']) && file_exists("uploads/chambres/".$r['chambre_image'])): ?>
-                    <img src="uploads/chambres/<?= htmlspecialchars($r['chambre_image']) ?>">
+                    <?php if (media_url($r['chambre_image'])): ?>
+                    <img src="<?= htmlspecialchars(media_url($r['chambre_image'])) ?>">
                     <?php else: ?>
                     🚪
                     <?php endif; ?>

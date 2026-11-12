@@ -149,8 +149,8 @@ $sl = ['en_attente'=>'En attente','confirmee'=>'Confirmée','annulee'=>'Annulée
                      onclick="selectRoom(<?= $c['id'] ?>, '<?= addslashes($c['numero']) ?>', '<?= addslashes($c['type']) ?>', <?= $c['prix'] ?>, <?= $c['capacite'] ?>)">
 
                     <div class="room-image">
-                        <?php if (!empty($c['image']) && file_exists("uploads/chambres/".$c['image'])): ?>
-                        <img src="uploads/chambres/<?= htmlspecialchars($c['image']) ?>" alt="Chambre <?= htmlspecialchars($c['numero']) ?>">
+                        <?php if (media_url($c['image'])): ?>
+                        <img src="<?= htmlspecialchars(media_url($c['image'])) ?>" alt="Chambre <?= htmlspecialchars($c['numero']) ?>">
                         <?php else: ?>
                         <div class="room-image-placeholder"><i class="bi bi-door-open"></i></div>
                         <?php endif; ?>
@@ -192,8 +192,8 @@ $sl = ['en_attente'=>'En attente','confirmee'=>'Confirmée','annulee'=>'Annulée
                     <?php foreach ($mes_reservations as $r): ?>
                     <div class="reservation-item">
                         <div class="reservation-image">
-                            <?php if (!empty($r['chambre_image']) && file_exists("uploads/chambres/".$r['chambre_image'])): ?>
-                            <img src="uploads/chambres/<?= htmlspecialchars($r['chambre_image']) ?>" alt="">
+                            <?php if (media_url($r['chambre_image'])): ?>
+                            <img src="<?= htmlspecialchars(media_url($r['chambre_image'])) ?>" alt="">
                             <?php else: ?>
                             <div style="width:100%;height:100%;background:linear-gradient(135deg,var(--sand),var(--gold));display:flex;align-items:center;justify-content:center;color:white;">
                                 <i class="bi bi-door-open"></i>

@@ -301,9 +301,7 @@ $chambres = $conn->query("SELECT * FROM chambres WHERE statut = 'disponible' ORD
             foreach ($chambres as $c):
                 $typeMap = ['simple'=>'Chambre Simple','double'=>'Chambre Double','deluxe'=>'Chambre Deluxe','suite'=>'Suite'];
                 $label = $typeMap[$c['type']] ?? ucfirst($c['type']);
-                $roomImage = (!empty($c['image']) && file_exists("uploads/chambres/".$c['image']))
-                    ? "uploads/chambres/".$c['image']
-                    : $defaultImages[$i % count($defaultImages)];
+                $roomImage = media_url($c['image']) ?: $defaultImages[$i % count($defaultImages)];
                 $i++;
             ?>
             <div class="room-card">

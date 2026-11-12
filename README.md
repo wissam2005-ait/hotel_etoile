@@ -17,6 +17,12 @@ Comptes de démonstration (affichés sur la page de connexion) :
 Envoyer les fichiers dans `htdocs`, puis copier `config.local.example.php` en `config.local.php`
 et y mettre les identifiants MySQL de l'hébergeur. Le fichier `.htaccess` bloque l'accès aux fichiers sensibles.
 
+## Hébergement Vercel (gratuit)
+Le projet est prêt pour Vercel (`vercel.json`, runtime `vercel-php`) avec une base **PostgreSQL Neon** :
+`pgcompat.php` traduit automatiquement les appels mysqli et le SQL MySQL vers PostgreSQL, les sessions et
+les photos des chambres sont enregistrées dans la base (`deploy/seed.pg.sql` crée les tables au premier lancement).
+Variables : `DATABASE_URL` (fournie par Neon) et `DEMO_MODE=1`.
+
 ## Hébergement Docker (Railway, Render)
 `Dockerfile` (PHP 8.2 + Apache). La connexion à la base se règle par les variables
 `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE`.

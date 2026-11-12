@@ -1,0 +1,31 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "functions": {
+    "api/index.php": {
+      "runtime": "vercel-php@0.9.0",
+      "includeFiles": "{*.php,deploy/seed.pg.sql}"
+    }
+  },
+  "routes": [
+    {
+      "src": "/\\..*",
+      "status": 404
+    },
+    {
+      "src": "/(deploy|uploads)/(.*\\.(sql|php))",
+      "status": 404
+    },
+    {
+      "src": "/(.*\\.sql|config\\.local\\.php|Dockerfile|README\\.md)",
+      "status": 404
+    },
+    {
+      "src": "/",
+      "dest": "/api/index.php"
+    },
+    {
+      "src": "/([a-z_]+\\.php)",
+      "dest": "/api/index.php"
+    }
+  ]
+}
