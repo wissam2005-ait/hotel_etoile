@@ -13,7 +13,7 @@ $role    = $_SESSION['role'];
 
 // Rediriger les admins vers leur propre page de profil
 if ($role === 'admin') {
-    header('Location: profile.php');
+    header('Location: dashboard.php');
     exit;
 }
 

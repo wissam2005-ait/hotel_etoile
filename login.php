@@ -97,6 +97,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <p>Pas encore de compte ? <a href="register.php">S'inscrire →</a></p>
         </div>
 
+        <?php if (getenv('DEMO_MODE')): ?>
+        <div style="margin-bottom:18px;padding:12px 14px;border:1px dashed rgba(201,169,110,.6);border-radius:10px;font-size:.9rem;line-height:1.6">
+            <strong>Comptes de démonstration</strong><br>
+            Client : <code>client@demo.fr</code> / <code>Client2026!</code><br>
+            Administrateur : <code>admin@demo.fr</code> / <code>Admin2026!</code>
+        </div>
+        <?php endif; ?>
+
         <?php if ($error): ?>
         <div class="alert-danger">
             <i class="bi bi-exclamation-circle"></i>
