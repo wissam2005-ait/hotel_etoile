@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     $prix        = (float)$_POST['prix'];
     $capacite    = (int)$_POST['capacite'];
     $description = htmlspecialchars(trim($_POST['description']));
-    $statut      = $_POST['statut'];
+    $statut      = in_array($_POST['statut'] ?? '', ['disponible', 'occupee', 'maintenance'], true) ? $_POST['statut'] : 'disponible';
     $image_name  = '';
 
     if (!empty($_FILES['image']['name'])) {
@@ -28,9 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $error = "Format d'image non supporté.";
         } else {
             $image_name = uniqid('ch_') . '.' . $ext;
-            $dest = "uploads/chambres/" . $image_name;
-            if (!is_dir("uploads/chambres")) mkdir("uploads/chambres", 0755, true);
-            if (!move_uploaded_file($_FILES['image']['tmp_name'], $dest)) {
+            if (!media_save($_FILES['image']['tmp_name'], $image_name)) {
                 $error = "Erreur upload."; $image_name = '';
             }
         }
@@ -57,14 +55,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $allowed = ['jpg','jpeg','png','webp'];
         if (in_array($ext, $allowed)) {
             $image_name = uniqid('ch_') . '.' . $ext;
-            $dest = "uploads/chambres/" . $image_name;
-            if (!is_dir("uploads/chambres")) mkdir("uploads/chambres", 0755, true);
-            if (move_uploaded_file($_FILES['image']['tmp_name'], $dest)) {
+            if (media_save($_FILES['image']['tmp_name'], $image_name)) {
                 $image_sql = ", image='$image_name'";
             }
         }
     }
-    $conn->query("UPDATE chambres SET numero='".addslashes($numero)."', type='".addslashes($type)."', prix=$prix, capacite=$capacite, description='".addslashes($description)."', statut='$statut'$image_sql WHERE id=$id");
+    if (!in_array($statut, ['disponible', 'occupee', 'maintenance'], true)) $statut = 'disponible';
+    $upd = $conn->prepare("UPDATE chambres SET numero=?, type=?, prix=?, capacite=?, description=?, statut=?$image_sql WHERE id=?");
+    $upd->bind_param("ssdissi", $numero, $type, $prix, $capacite, $description, $statut, $id);
+    $upd->execute(); $upd->close();
     $success = "Chambre mise à jour.";
 }
 
@@ -74,7 +73,7 @@ if (isset($_GET['delete'])) {
     if ($ch && $ch['statut'] === 'occupee') {
         $error = "Impossible de supprimer une chambre occupée.";
     } else {
-        if ($ch && $ch['image'] && file_exists("uploads/chambres/" . $ch['image'])) unlink("uploads/chambres/" . $ch['image']);
+        if ($ch && $ch['image']) media_delete($ch['image']);
         $conn->query("DELETE FROM chambres WHERE id=$id");
         $success = "Chambre supprimée.";
     }
@@ -198,8 +197,8 @@ $statut_label = ['disponible'=>'✓ Disponible','occupee'=>'● Occupée','maint
                             <?php foreach ($chambres as $c): ?>
                             <tr>
                                 <td>
-                                    <?php if (!empty($c['image']) && file_exists("uploads/chambres/".$c['image'])): ?>
-                                    <img src="uploads/chambres/<?= htmlspecialchars($c['image']) ?>" class="table-thumb">
+                                    <?php if (media_url($c['image'])): ?>
+                                    <img src="<?= htmlspecialchars(media_url($c['image'])) ?>" class="table-thumb">
                                     <?php else: ?>
                                     <div class="table-thumb-ph">🚪</div>
                                     <?php endif; ?>

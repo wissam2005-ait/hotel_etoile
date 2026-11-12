@@ -34,7 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'])) {
         if ($stmt->num_rows > 0) {
             $error = "Cet email est déjà utilisé par un autre compte.";
         } else {
-            $conn->query("UPDATE users SET nom='" . addslashes($nom) . "', prenom='" . addslashes($prenom) . "', email='" . addslashes($email) . "' WHERE id=$user_id");
+            $upd = $conn->prepare("UPDATE users SET nom=?, prenom=?, email=? WHERE id=?");
+            $upd->bind_param("sssi", $nom, $prenom, $email, $user_id);
+            $upd->execute(); $upd->close();
             $_SESSION['nom'] = $nom;
             $_SESSION['prenom'] = $prenom;
             $_SESSION['email'] = $email;

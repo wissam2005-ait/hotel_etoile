@@ -167,8 +167,8 @@ foreach ($reservations as $r) {
             <td>
                 <div class="room-cell">
                     <div class="room-thumb">
-                        <?php if (!empty($r['chambre_image']) && file_exists("uploads/chambres/".$r['chambre_image'])): ?>
-                        <img src="uploads/chambres/<?= htmlspecialchars($r['chambre_image']) ?>" alt="">
+                        <?php if (media_url($r['chambre_image'])): ?>
+                        <img src="<?= htmlspecialchars(media_url($r['chambre_image'])) ?>" alt="">
                         <?php else: ?>🚪<?php endif; ?>
                     </div>
                     <div>
