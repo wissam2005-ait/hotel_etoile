@@ -1,0 +1,7 @@
+# Fichiers à ne jamais servir
+<FilesMatch "(\.(sql|md|example\.php)|^config\.local\.php|^Dockerfile)$">
+  Require all denied
+</FilesMatch>
+RedirectMatch 403 ^/deploy/
+Options -Indexes
+DirectoryIndex index.php

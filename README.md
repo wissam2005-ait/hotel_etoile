@@ -13,7 +13,11 @@ Comptes de démonstration (affichés sur la page de connexion) :
 1. Importer `wissam.sql` dans phpMyAdmin (base `wissam`).
 2. Copier le dossier dans `htdocs` et ouvrir `http://localhost/hotel_etoile`.
 
-## Hébergement
+## Hébergement mutualisé (ByetHost, InfinityFree…)
+Envoyer les fichiers dans `htdocs`, puis copier `config.local.example.php` en `config.local.php`
+et y mettre les identifiants MySQL de l'hébergeur. Le fichier `.htaccess` bloque l'accès aux fichiers sensibles.
+
+## Hébergement Docker (Railway, Render)
 `Dockerfile` (PHP 8.2 + Apache). La connexion à la base se règle par les variables
 `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE`.
 Au premier lancement, les tables et les données de démonstration (`deploy/seed.sql`) sont créées automatiquement.
