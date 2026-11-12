@@ -1,11 +1,17 @@
 <?php
-// Connexion à la base : réglages lus dans les variables d'environnement (hébergement),
-// avec des valeurs par défaut pour un serveur local (XAMPP / WAMP).
-$dbHost = getenv('MYSQLHOST') ?: 'localhost';
-$dbUser = getenv('MYSQLUSER') ?: 'root';
-$dbPass = getenv('MYSQLPASSWORD') ?: '';
-$dbName = getenv('MYSQLDATABASE') ?: 'wissam';
-$dbPort = (int) (getenv('MYSQLPORT') ?: 3306);
+// Connexion à la base de données.
+// Réglages, par ordre de priorité :
+//   1. fichier config.local.php (hébergement mutualisé : ByetHost, InfinityFree…), jamais envoyé sur GitHub
+//   2. variables d'environnement MYSQLHOST, MYSQLUSER… (Docker, Railway, Render)
+//   3. valeurs par défaut d'un serveur local (XAMPP / WAMP)
+$cfg = is_file(__DIR__ . '/config.local.php') ? (require __DIR__ . '/config.local.php') : [];
+
+$dbHost = $cfg['host']     ?? (getenv('MYSQLHOST') ?: 'localhost');
+$dbUser = $cfg['user']     ?? (getenv('MYSQLUSER') ?: 'root');
+$dbPass = $cfg['password'] ?? (getenv('MYSQLPASSWORD') ?: '');
+$dbName = $cfg['database'] ?? (getenv('MYSQLDATABASE') ?: 'wissam');
+$dbPort = (int) ($cfg['port'] ?? (getenv('MYSQLPORT') ?: 3306));
+$DEMO_MODE = (bool) ($cfg['demo'] ?? getenv('DEMO_MODE'));
 
 mysqli_report(MYSQLI_REPORT_OFF);
 $conn = new mysqli($dbHost, $dbUser, $dbPass, $dbName, $dbPort);
@@ -15,11 +21,24 @@ if ($conn->connect_error) {
 }
 $conn->set_charset("utf8mb4");
 
-// Première mise en ligne : création des tables et des données de démonstration.
+// Base vide : création des tables et des chambres de démonstration.
 $check = $conn->query("SHOW TABLES LIKE 'users'");
 if ($check && $check->num_rows === 0 && is_file(__DIR__ . '/deploy/seed.sql')) {
     if ($conn->multi_query(file_get_contents(__DIR__ . '/deploy/seed.sql'))) {
         while ($conn->more_results() && $conn->next_result()) { /* vider les résultats */ }
+    }
+}
+
+// Mode démo : comptes de test toujours disponibles.
+if ($DEMO_MODE) {
+    $demo = [
+        ['Démo', 'Client', 'client@demo.fr', '$2y$10$R.lC0EdsAZ0DjoNqCzuxQeYrN3uni9G9FAkmU3A9nq50DsZIDCK0y', 'client'],
+        ['Démo', 'Admin',  'admin@demo.fr',  '$2y$10$hg85bEhXXBOwoGsAggL4.utvezI0HK7TXaDIntOruUbin7tBvIPW2', 'admin'],
+    ];
+    $ins = $conn->prepare("INSERT IGNORE INTO users (nom, prenom, email, password, role) VALUES (?, ?, ?, ?, ?)");
+    if ($ins) {
+        foreach ($demo as $d) { $ins->bind_param("sssss", ...$d); $ins->execute(); }
+        $ins->close();
     }
 }
 ?>
