@@ -26,6 +26,10 @@ class PgCompatConn
         parse_str($p['query'] ?? '', $q);
         $dsn = sprintf('pgsql:host=%s;port=%d;dbname=%s;sslmode=%s',
             $p['host'], $p['port'] ?? 5432, ltrim($p['path'] ?? '/postgres', '/'), $q['sslmode'] ?? 'require');
+        // Neon : indique le serveur visé, pour les bibliothèques PostgreSQL sans SNI.
+        if (preg_match('/^(ep-[a-z0-9-]+?)(-pooler)?\./', $p['host'], $m)) {
+            $dsn .= ";options='endpoint={$m[1]}'";
+        }
         try {
             $this->pdo = new PDO($dsn, urldecode($p['user'] ?? ''), urldecode($p['pass'] ?? ''), [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -34,6 +38,7 @@ class PgCompatConn
             ]);
         } catch (PDOException $e) {
             $this->connect_error = $e->getMessage();
+            error_log('Connexion PostgreSQL impossible : ' . preg_replace('/password=\S+/', 'password=***', $e->getMessage()));
         }
     }
 
